@@ -1,0 +1,6 @@
+#!/bin/sh
+exec gradle "$@"
+Commit it, then also update the build.yml to remove the chmod lines since they're not needed with this approach.
+Actually easier fix - just remove the chmod lines from the workflow. Edit .github/workflows/build.yml and remove these two lines from both Linux jobs:
+- run: chmod +x gradlew
+        working-directory: modframework-ui
