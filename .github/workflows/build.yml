@@ -16,10 +16,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
       - name: Build APK
-        run: |
-          cd modframework-ui
-          gradle :composeApp:assembleDebug
+        run: gradle :composeApp:assembleDebug
+        working-directory: modframework-ui
       - uses: actions/upload-artifact@v4
         with:
           name: orange-modloader-android
@@ -34,10 +36,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
       - name: Build MSI
-        run: |
-          cd modframework-ui
-          gradle :composeApp:packageMsi
+        run: gradle :composeApp:packageMsi
+        working-directory: modframework-ui
       - uses: actions/upload-artifact@v4
         with:
           name: orange-modloader-windows
