@@ -37,4 +37,4 @@ public class OrangeMLForge {
     public void onServerStarting(ServerStartingEvent event) {
         System.out.println("[OrangeML] Server starting!");
     }
-{
+}
