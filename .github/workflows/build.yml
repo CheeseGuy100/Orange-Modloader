@@ -5,7 +5,8 @@ on:
     branches: [ main ]
   release:
     types: [ created ]
-
+permissions:
+  contents: write
 jobs:
   build-android:
     name: Build Android APK
