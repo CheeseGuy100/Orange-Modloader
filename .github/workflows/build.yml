@@ -3,36 +3,37 @@ name: Build Orange ModLoader
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  release:
+    types: [ created ]
 
 jobs:
   build-android:
     name: Build Android APK
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.5'
       - name: Build APK
-        run: gradle :composeApp:assembleDebug
         working-directory: modframework-ui
-      - uses: actions/upload-artifact@v4
+        run: gradle composeApp:assembleDebug
+      - name: Upload APK to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
         with:
-          name: orange-modloader-android
-          path: modframework-ui/composeApp/build/outputs/apk/debug/*.apk
+          files: modframework-ui/composeApp/build/outputs/apk/debug/*.apk
 
   build-windows:
     name: Build Windows EXE
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -40,9 +41,10 @@ jobs:
         with:
           gradle-version: '8.5'
       - name: Build MSI
-        run: gradle :composeApp:packageMsi
         working-directory: modframework-ui
-      - uses: actions/upload-artifact@v4
+        run: gradle packageMsi
+      - name: Upload MSI to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
         with:
-          name: orange-modloader-windows
-          path: modframework-ui/composeApp/build/compose/binaries/main/msi/*.msi
+          files: modframework-ui/composeApp/build/compose/binaries/main/msi/*.msi
