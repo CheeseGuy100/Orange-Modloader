@@ -169,7 +169,7 @@ mvn package
 ```
 
 This produces a fat JAR in `target/` with LuaJ included.
-AND ITS OPEN SOURCE
+AND ITS OPEN SOURCE and UI-UX BY CLAUDE (ANTHROPIC)
 ---
 
 ## License
