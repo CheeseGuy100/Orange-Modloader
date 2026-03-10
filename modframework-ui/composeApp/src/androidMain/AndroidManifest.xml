@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:label="Orange ModLoader"
-       android:icon="@mipmap/ic_launcher android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+       android:icon="@mipmap/ic_launcher
+ android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
         <activity
             android:name=".MainActivity"
             android:exported="true"
