@@ -1,0 +1,40 @@
+package com.modframework.forge;
+
+import com.modframework.core.ModFramework;
+import com.modframework.minecraft.MinecraftBridge;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+@Mod(OrangeMLForge.MOD_ID)
+public class OrangeMLForge {
+
+    public static final String MOD_ID = "orangeml";
+
+    public OrangeMLForge() {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::clientSetup);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        ModFramework.getInstance().initialize();
+        MinecraftBridge.init();
+        System.out.println("[OrangeML] Forge mod initialized!");
+    }
+
+    private void clientSetup(final FMLClientSetupEvent event) {
+        System.out.println("[OrangeML] Client setup complete!");
+    }
+
+    @SubscribeEvent
+    public void onServerStarting(ServerStartingEvent event) {
+        System.out.println("[OrangeML] Server starting!");
+    }
+}
