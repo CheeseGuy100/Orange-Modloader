@@ -57,14 +57,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-buildTypes {
-        debug {
-            archivesName = "OrangeModLoader-debug"
-        }
-        release {
-            archivesName = "OrangeModLoader"
-        }
-    }
 }
 
 compose.desktop {
