@@ -28,8 +28,7 @@ kotlin {
             dependencies {
                 implementation(compose.preview)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
-        implementation("androidx.activity:activity-compose:1.8.0")
-        }
+                implementation("androidx.activity:activity-compose:1.8.0")
             }
         }
 
