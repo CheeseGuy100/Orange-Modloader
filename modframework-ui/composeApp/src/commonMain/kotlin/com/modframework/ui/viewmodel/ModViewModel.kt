@@ -1,26 +1,45 @@
 package com.modframework.ui.viewmodel
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.modframework.ui.ModInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class ModViewModel {
+class ModViewModel(private val context: Context? = null) {
+    private val prefs: SharedPreferences? = context?.getSharedPreferences("mod_states", Context.MODE_PRIVATE)
+
     private val _mods = MutableStateFlow<List<ModInfo>>(emptyList())
     val mods: StateFlow<List<ModInfo>> = _mods.asStateFlow()
 
     private val _selectedMod = MutableStateFlow<ModInfo?>(null)
     val selectedMod: StateFlow<ModInfo?> = _selectedMod.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     init {
-        _mods.value = sampleMods()
+        loadMods()
+    }
+
+    fun loadMods() {
+        _isLoading.value = true
+        _mods.value = sampleMods().map { mod ->
+            mod.copy(isEnabled = prefs?.getBoolean(mod.id, mod.isEnabled) ?: mod.isEnabled)
+        }
+        _isLoading.value = false
     }
 
     fun toggleMod(modId: String) {
         _mods.update { list ->
             list.map { mod ->
-                if (mod.id == modId) mod.copy(isEnabled = !mod.isEnabled) else mod
+                if (mod.id == modId) {
+                    val newState = !mod.isEnabled
+                    prefs?.edit()?.putBoolean(modId, newState)?.apply()
+                    mod.copy(isEnabled = newState)
+                } else mod
             }
         }
         _selectedMod.update { selected ->
@@ -29,22 +48,17 @@ class ModViewModel {
     }
 
     fun selectMod(mod: ModInfo?) { _selectedMod.value = mod }
-    fun enableAll() { _mods.update { list -> list.map { it.copy(isEnabled = true) } } }
-    fun disableAll() { _mods.update { list -> list.map { it.copy(isEnabled = false) } } }
+    fun enableAll() { _mods.update { list -> list.map { it.copy(isEnabled = true) }.also { newList -> newList.forEach { prefs?.edit()?.putBoolean(it.id, true)?.apply() } } } }
+    fun disableAll() { _mods.update { list -> list.map { it.copy(isEnabled = false) }.also { newList -> newList.forEach { prefs?.edit()?.putBoolean(it.id, false)?.apply() } } } }
 
     val enabledCount get() = _mods.value.count { it.isEnabled }
     val totalCount get() = _mods.value.size
 
     private fun sampleMods() = listOf(
-        ModInfo("example_mod", "Example Mod", "1.0.0", "YourName",
-            "A simple example mod showing Orange ModLoader features.", true, 2, 4),
-        ModInfo("terrain_plus", "Terrain Plus", "2.3.1", "TerrainDev",
-            "Overhauls world generation with new biomes and cave systems.", true, 12, 8),
-        ModInfo("magic_spells", "Magic Spells", "0.9.4", "WizardCoder",
-            "Adds a full spell system with 30+ spells.", false, 31, 15),
-        ModInfo("better_ui", "Better UI", "1.1.0", "UIModder",
-            "Improves the in-game HUD with cleaner health bars.", true, 0, 6),
-        ModInfo("sound_pack", "Immersive Sounds", "1.0.2", "AudioDev",
-            "Replaces default game sounds with high quality audio.", true, 0, 2)
+        ModInfo("example_mod", "Example Mod", "1.0.0", "YourName", "A simple example mod showing Orange ModLoader features.", true, 2, 4),
+        ModInfo("terrain_plus", "Terrain Plus", "2.3.1", "TerrainDev", "Overhauls world generation with new biomes and cave systems.", true, 12, 8),
+        ModInfo("magic_spells", "Magic Spells", "0.9.4", "WizardCoder", "Adds a full spell system with 30+ spells.", false, 31, 15),
+        ModInfo("better_ui", "Better UI", "1.1.0", "UIModder", "Improves the in-game HUD with cleaner health bars.", true, 0, 6),
+        ModInfo("sound_pack", "Immersive Sounds", "1.0.2", "AudioDev", "Replaces default game sounds with high quality audio.", true, 0, 2)
     )
 }
