@@ -1,16 +1,12 @@
 package com.modframework.ui.viewmodel
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.modframework.ui.ModInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class ModViewModel(private val context: Context? = null) {
-    private val prefs: SharedPreferences? = context?.getSharedPreferences("mod_states", Context.MODE_PRIVATE)
-
+class ModViewModel {
     private val _mods = MutableStateFlow<List<ModInfo>>(emptyList())
     val mods: StateFlow<List<ModInfo>> = _mods.asStateFlow()
 
@@ -26,20 +22,14 @@ class ModViewModel(private val context: Context? = null) {
 
     fun loadMods() {
         _isLoading.value = true
-        _mods.value = sampleMods().map { mod ->
-            mod.copy(isEnabled = prefs?.getBoolean(mod.id, mod.isEnabled) ?: mod.isEnabled)
-        }
+        _mods.value = sampleMods()
         _isLoading.value = false
     }
 
     fun toggleMod(modId: String) {
         _mods.update { list ->
             list.map { mod ->
-                if (mod.id == modId) {
-                    val newState = !mod.isEnabled
-                    prefs?.edit()?.putBoolean(modId, newState)?.apply()
-                    mod.copy(isEnabled = newState)
-                } else mod
+                if (mod.id == modId) mod.copy(isEnabled = !mod.isEnabled) else mod
             }
         }
         _selectedMod.update { selected ->
@@ -48,8 +38,8 @@ class ModViewModel(private val context: Context? = null) {
     }
 
     fun selectMod(mod: ModInfo?) { _selectedMod.value = mod }
-    fun enableAll() { _mods.update { list -> list.map { it.copy(isEnabled = true) }.also { newList -> newList.forEach { prefs?.edit()?.putBoolean(it.id, true)?.apply() } } } }
-    fun disableAll() { _mods.update { list -> list.map { it.copy(isEnabled = false) }.also { newList -> newList.forEach { prefs?.edit()?.putBoolean(it.id, false)?.apply() } } } }
+    fun enableAll() { _mods.update { list -> list.map { it.copy(isEnabled = true) } } }
+    fun disableAll() { _mods.update { list -> list.map { it.copy(isEnabled = false) } } }
 
     val enabledCount get() = _mods.value.count { it.isEnabled }
     val totalCount get() = _mods.value.size
