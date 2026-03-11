@@ -213,4 +213,4 @@ private fun EmptyDetailState() {
             )
         }
     }
-}
+} 
