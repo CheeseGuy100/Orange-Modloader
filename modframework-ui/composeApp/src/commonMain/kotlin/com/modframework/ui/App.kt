@@ -20,7 +20,7 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
     OrangeModLoaderTheme {
         val mods by viewModel.mods.collectAsState()
         val selectedMod by viewModel.selectedMod.collectAsState()
-
+val isLoading by viewModel.isLoading.collectAsState()
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
