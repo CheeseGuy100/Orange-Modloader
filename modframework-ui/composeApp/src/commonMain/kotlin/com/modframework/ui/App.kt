@@ -222,3 +222,5 @@ private fun EmptyDetailState() {
         }
     }
 }
+   }
+}
