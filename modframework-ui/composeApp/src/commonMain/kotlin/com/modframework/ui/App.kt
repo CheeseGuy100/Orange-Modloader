@@ -1,9 +1,7 @@
 package com.modframework.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.modframework.ui.components.ModCard
@@ -22,91 +21,84 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
     OrangeModLoaderTheme {
         val mods by viewModel.mods.collectAsState()
         val selectedMod by viewModel.selectedMod.collectAsState()
-val isLoading by viewModel.isLoading.collectAsState()
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        ) {if (isLoading) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator(
-            color = Color(0xFFFF6B00),
-            modifier = Modifier.size(48.dp)
-        )
-    }
-    return@OrangeModLoaderTheme
-}
-            val isWideScreen = maxWidth > 600.dp
+        val isLoading by viewModel.isLoading.collectAsState()
 
-            if (isWideScreen) {
-                Row(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        modifier = Modifier
-                            .width(360.dp)
-                            .fillMaxHeight()
-                            .background(MaterialTheme.colorScheme.surface)
-                    ( }
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(
+                    color = Color(0xFFFF6B00),
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+        } else {
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                val isWideScreen = maxWidth > 600.dp
+
+                if (isWideScreen) {
+                    Row(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .width(360.dp)
+                                .fillMaxHeight()
+                                .background(MaterialTheme.colorScheme.surface)
+                        ) {
+                            ModListHeader(
+                                enabledCount = viewModel.enabledCount,
+                                totalCount = viewModel.totalCount,
+                                onEnableAll = { viewModel.enableAll() },
+                                onDisableAll = { viewModel.disableAll() }
+                            )
+                            ModList(
+                                mods = mods,
+                                selectedModId = selectedMod?.id,
+                                onSelect = { viewModel.selectMod(it) },
+                                onToggle = { viewModel.toggleMod(it) }
+                            )
+                        }
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            if (selectedMod != null) {
+                                ModDetailPanel(
+                                    mod = selectedMod!!,
+                                    onToggle = { viewModel.toggleMod(selectedMod!!.id) }
+                                )
+                            } else {
+                                EmptyDetailState()
+                            }
+                        }
+                    }
+                } else {
+                    Column(modifier = Modifier.fillMaxSize()) {
                         ModListHeader(
                             enabledCount = viewModel.enabledCount,
                             totalCount = viewModel.totalCount,
                             onEnableAll = { viewModel.enableAll() },
                             onDisableAll = { viewModel.disableAll() }
                         )
-                        ModList(
-                            mods = mods,
-                            selectedModId = selectedMod?.id,
-                            onSelect = { viewModel.selectMod(it) },
-                            onToggle = { viewModel.toggleMod(it) }
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .width(1.dp)
-                            .fillMaxHeight()
-                            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                    )
-
-                    Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
                         if (selectedMod != null) {
-                            ModDetailPanel(
-                                mod = selectedMod!!,
-                                onToggle = { viewModel.toggleMod(selectedMod!!.id) }
-                            )
-                        } else {
-                            EmptyDetailState()
-                        }
-                    }
-                }
-            } else {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    ModListHeader(
-                        enabledCount = viewModel.enabledCount,
-                        totalCount = viewModel.totalCount,
-                        onEnableAll = { viewModel.enableAll() },
-                        onDisableAll = { viewModel.disableAll() }
-                    )
-
-                    if (selectedMod != null) {
-                        Column {
-                            TextButton(
-                                onClick = { viewModel.selectMod(null) },
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text("← Back to mods")
+                            Column {
+                                TextButton(
+                                    onClick = { viewModel.selectMod(null) },
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                ) {
+                                    Text("← Back to mods")
+                                }
+                                ModDetailPanel(
+                                    mod = selectedMod!!,
+                                    onToggle = { viewModel.toggleMod(selectedMod!!.id) }
+                                )
                             }
-                            ModDetailPanel(
-                                mod = selectedMod!!,
-                                onToggle = { viewModel.toggleMod(selectedMod!!.id) }
+                        } else {
+                            ModList(
+                                mods = mods,
+                                selectedModId = null,
+                                onSelect = { viewModel.selectMod(it) },
+                                onToggle = { viewModel.toggleMod(it) }
                             )
                         }
-                    } else {
-                        ModList(
-                            mods = mods,
-                            selectedModId = null,
-                            onSelect = { viewModel.selectMod(it) },
-                            onToggle = { viewModel.toggleMod(it) }
-                        )
                     }
                 }
             }
@@ -121,24 +113,18 @@ private fun ModListHeader(
     onEnableAll: () -> Unit,
     onDisableAll: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
+    Column(modifier = Modifier.padding(16.dp)) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
                     text = "🟠 Orange ModLoader",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color(0xFFFF6B00)
                 )
                 Text(
                     text = "$enabledCount / $totalCount mods active",
@@ -146,7 +132,6 @@ private fun ModListHeader(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
                     onClick = onDisableAll,
@@ -164,7 +149,6 @@ private fun ModListHeader(
                 }
             }
         }
-
         LinearProgressIndicator(
             progress = { if (totalCount > 0) enabledCount.toFloat() / totalCount else 0f },
             modifier = Modifier.fillMaxWidth(),
