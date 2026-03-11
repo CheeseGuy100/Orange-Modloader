@@ -30,10 +30,33 @@ private val DarkColorScheme = darkColorScheme(
     outline = Color(0xFF333333)
 )
 
+private val LightColorScheme = lightColorScheme(
+    primary = OrangePrimary,
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFFFDCC2),
+    onPrimaryContainer = Color(0xFF4A1800),
+    secondary = OrangeDark,
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFFFDCC2),
+    onSecondaryContainer = Color(0xFF4A1800),
+    tertiary = Color(0xFF8B5E00),
+    background = Color(0xFFFFFBF8),
+    onBackground = Color(0xFF1A1A1A),
+    surface = Color(0xFFF5F0EB),
+    onSurface = Color(0xFF1A1A1A),
+    surfaceVariant = Color(0xFFEDE8E3),
+    onSurfaceVariant = Color(0xFF4A4540),
+    error = Color(0xFFBA1A1A),
+    outline = Color(0xFFCCC5BE)
+)
+
 @Composable
-fun OrangeModLoaderTheme(content: @Composable () -> Unit) {
+fun OrangeModLoaderTheme(
+    darkTheme: Boolean = true,
+    content: @Composable () -> Unit
+) {
     MaterialTheme(
-        colorScheme = DarkColorScheme,
+        colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
         typography = Typography(),
         content = content
     )
