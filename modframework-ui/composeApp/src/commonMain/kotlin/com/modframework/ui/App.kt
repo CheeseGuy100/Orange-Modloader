@@ -18,12 +18,21 @@ import com.modframework.ui.viewmodel.ModViewModel
 
 @Composable
 fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
-    OrangeModLoaderTheme {
+    var isDarkMode by remember { mutableStateOf(true) }
+    var showSettings by remember { mutableStateOf(false) }
+
+    OrangeModLoaderTheme(darkTheme = isDarkMode) {
         val mods by viewModel.mods.collectAsState()
         val selectedMod by viewModel.selectedMod.collectAsState()
         val isLoading by viewModel.isLoading.collectAsState()
 
-        if (isLoading) {
+        if (showSettings) {
+            SettingsScreen(
+                isDarkMode = isDarkMode,
+                onDarkModeToggle = { isDarkMode = it },
+                onBack = { showSettings = false }
+            )
+        } else if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
                     color = Color(0xFFFF6B00),
@@ -50,7 +59,8 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
                                 enabledCount = viewModel.enabledCount,
                                 totalCount = viewModel.totalCount,
                                 onEnableAll = { viewModel.enableAll() },
-                                onDisableAll = { viewModel.disableAll() }
+                                onDisableAll = { viewModel.disableAll() },
+                                onSettings = { showSettings = true }
                             )
                             ModList(
                                 mods = mods,
@@ -76,7 +86,8 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
                             enabledCount = viewModel.enabledCount,
                             totalCount = viewModel.totalCount,
                             onEnableAll = { viewModel.enableAll() },
-                            onDisableAll = { viewModel.disableAll() }
+                            onDisableAll = { viewModel.disableAll() },
+                            onSettings = { showSettings = true }
                         )
                         if (selectedMod != null) {
                             Column {
@@ -111,7 +122,8 @@ private fun ModListHeader(
     enabledCount: Int,
     totalCount: Int,
     onEnableAll: () -> Unit,
-    onDisableAll: () -> Unit
+    onDisableAll: () -> Unit,
+    onSettings: () -> Unit
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Row(
@@ -146,6 +158,9 @@ private fun ModListHeader(
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text("All", style = MaterialTheme.typography.labelSmall)
+                }
+                IconButton(onClick = onSettings) {
+                    Text("⚙️")
                 }
             }
         }
