@@ -163,7 +163,12 @@ private fun ModListHeader(
                     Text("All", style = MaterialTheme.typography.labelSmall)
                 }
                 IconButton(onClick = onSettings) {
-                    Text("⚙️")
+    Icon(
+        imageVector = Icons.Default.Settings,
+        contentDescription = "Settings",
+        tint = Color(0xFFFF6B00)
+    )
+}
                 }
             }
         }
