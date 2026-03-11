@@ -35,7 +35,15 @@ val isLoading by viewModel.isLoading.collectAsState()
                             .width(360.dp)
                             .fillMaxHeight()
                             .background(MaterialTheme.colorScheme.surface)
-                    ) {
+                    ) {if (isLoading) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(
+            color = Color(0xFFFF6B00),
+            modifier = Modifier.size(48.dp)
+        )
+    }
+    return@OrangeModLoaderTheme
+}
                         ModListHeader(
                             enabledCount = viewModel.enabledCount,
                             totalCount = viewModel.totalCount,
