@@ -15,6 +15,9 @@ import androidx.compose.ui.unit.dp
 import com.modframework.ui.components.ModCard
 import com.modframework.ui.components.ModDetailPanel
 import com.modframework.ui.viewmodel.ModViewModel
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
 
 @Composable
 fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
