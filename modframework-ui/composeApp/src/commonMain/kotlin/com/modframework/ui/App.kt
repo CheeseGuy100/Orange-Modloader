@@ -218,9 +218,7 @@ private fun EmptyDetailState() {
                 text = "Select a mod to view details",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+   )
         }
     }
-}
-   }
 }
