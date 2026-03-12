@@ -1,4 +1,4 @@
-# Orange-Modloader
+# Mangoloader
 "Built with the help of Claude (Anthropic)"
 # ModFramework
 
