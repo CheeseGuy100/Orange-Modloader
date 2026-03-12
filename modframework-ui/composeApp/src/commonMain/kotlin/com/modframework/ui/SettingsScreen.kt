@@ -99,7 +99,7 @@ fun SettingsScreen(
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "Version 0.0.1",
+                    text = "Version 0.2.0-Alpha",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.clickable { tapCount++ }
