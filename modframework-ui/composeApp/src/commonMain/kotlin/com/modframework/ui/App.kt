@@ -225,22 +225,6 @@ private fun ModList(
     }
 }
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        items(mods, key = { it.id }) { mod ->
-            ModCard(
-                mod = mod,
-                isSelected = mod.id == selectedModId,
-                onClick = { onSelect(mod) },
-                onToggle = { onToggle(mod.id) }
-            )
-        }
-        item { Spacer(Modifier.height(8.dp)) }
-    }
-}
 
 @Composable
 private fun EmptyDetailState() {
