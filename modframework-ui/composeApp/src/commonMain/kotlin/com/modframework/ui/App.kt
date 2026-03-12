@@ -31,7 +31,10 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
         if (showSettings) {
             SettingsScreen(
                 isDarkMode = isDarkMode,
-                onDarkModeToggle = { isDarkMode = it },
+                 onDarkModeToggle = { 
+    isDarkMode = it
+    PreferencesManager.setBoolean("darkMode", it)
+},,
                 onBack = { showSettings = false }
             )
         } else if (isLoading) {
