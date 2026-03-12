@@ -12,7 +12,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.foundation.clickable
 @Composable
 fun SettingsScreen(
     isDarkMode: Boolean,
@@ -115,10 +116,16 @@ fun SettingsScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "ko-fi.com/cheeseguycheese23983",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                 
+               val uriHandler = LocalUriHandler.current
+Text(
+    text = "ko-fi.com/cheeseguycheese23983",
+    style = MaterialTheme.typography.bodySmall,
+    color = Color(0xFFFF6B00),
+    modifier = Modifier.clickable {
+        uriHandler.openUri("https://ko-fi.com/cheeseguycheese23983")
+    }
+)
             }
         }
 
