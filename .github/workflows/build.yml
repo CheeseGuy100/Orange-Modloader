@@ -5,8 +5,10 @@ on:
     branches: [ main ]
   release:
     types: [ created ]
+
 permissions:
   contents: write
+
 jobs:
   build-android:
     name: Build Android APK
@@ -23,11 +25,13 @@ jobs:
       - name: Build APK
         working-directory: modframework-ui
         run: gradle composeApp:assembleDebug
+      - name: Rename APK
+        run: mv modframework-ui/composeApp/build/outputs/apk/debug/composeApp-debug.apk modframework-ui/composeApp/build/outputs/apk/debug/OrangeModLoader-${{ github.ref_name }}.apk
       - name: Upload APK to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: modframework-ui/composeApp/build/outputs/apk/debug/*.apk
+          files: modframework-ui/composeApp/build/outputs/apk/debug/OrangeModLoader-${{ github.ref_name }}.apk
 
   build-windows:
     name: Build Windows EXE
