@@ -1,19 +1,18 @@
 package com.modframework.ui
 
-import androidx.compose.animation.*
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.foundation.clickable
+
 @Composable
 fun SettingsScreen(
     isDarkMode: Boolean,
@@ -31,6 +30,8 @@ fun SettingsScreen(
             tapCount = 0
         }
     }
+
+    val uriHandler = LocalUriHandler.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -92,17 +93,33 @@ fun SettingsScreen(
                     color = Color(0xFFFF6B00)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Orange ModLoader", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                Text(
+                    text = "Orange ModLoader",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium
+                )
                 Text(
                     text = "Version 0.0.1",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.clickable { tapCount++ }
                 )
-                Text(text = "Built by CheeseGuy100", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(text = "UI/UX by Claude (Anthropic)", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    text = "Built by CheeseGuy100",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = "UI/UX by Claude (Anthropic)",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "MIT License - Open Source", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    text = "MIT License - Open Source",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
 
             HorizontalDivider()
@@ -116,20 +133,16 @@ fun SettingsScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                 
-               val uriHandler = LocalUriHandler.current
-Text(
-    text = "ko-fi.com/cheeseguycheese23983",
-    style = MaterialTheme.typography.bodySmall,
-    color = Color(0xFFFF6B00),
-    modifier = Modifier.clickable {
-        uriHandler.openUri("https://ko-fi.com/cheeseguycheese23983")
-    }
-)
+                    text = "☕ ko-fi.com/cheeseguycheese23983",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFFFF6B00),
+                    modifier = Modifier.clickable {
+                        uriHandler.openUri("https://ko-fi.com/cheeseguycheese23983")
+                    }
+                )
             }
         }
 
-        // Cheese rain overlay
         if (showCheese) {
             Box(
                 modifier = Modifier.fillMaxSize(),
