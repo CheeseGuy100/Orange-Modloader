@@ -9,7 +9,6 @@ plugins {
 
 kotlin {
     androidTarget()
-
     jvm("desktop")
 
     sourceSets {
@@ -20,10 +19,8 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.ui)
                 implementation(compose.components.resources)
- implementation(compose.components.resources)
-
-implementation("com.russhwolf:multiplatform-settings:1.1.0")
- implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+                implementation("com.russhwolf:multiplatform-settings:1.1.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
             }
         }
 
