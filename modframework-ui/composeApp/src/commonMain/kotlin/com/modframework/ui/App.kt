@@ -20,7 +20,7 @@ import com.modframework.ui.viewmodel.ModViewModel
 
 @Composable
 fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
-    var isDarkMode by remember { mutableStateOf(true) }
+    var isDarkMode by remember { mutableStateOf(PreferencesManager.getBoolean("darkMode", true)) }
     var showSettings by remember { mutableStateOf(false) }
 
     OrangeModLoaderTheme(darkTheme = isDarkMode) {
