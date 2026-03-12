@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,9 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.modframework.ui.components.ModCard
 import com.modframework.ui.components.ModDetailPanel
 import com.modframework.ui.viewmodel.ModViewModel
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
 
 @Composable
 fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
@@ -163,12 +162,11 @@ private fun ModListHeader(
                     Text("All", style = MaterialTheme.typography.labelSmall)
                 }
                 IconButton(onClick = onSettings) {
-    Icon(
-        imageVector = Icons.Default.Settings,
-        contentDescription = "Settings",
-        tint = Color(0xFFFF6B00)
-    )
-}
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = Color(0xFFFF6B00)
+                    )
                 }
             }
         }
@@ -218,7 +216,7 @@ private fun EmptyDetailState() {
                 text = "Select a mod to view details",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
-   )
+            )
         }
     }
 }
