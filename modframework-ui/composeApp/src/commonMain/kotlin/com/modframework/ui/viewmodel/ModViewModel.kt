@@ -22,7 +22,7 @@ class ModViewModel {
 
     fun loadMods() {
         _isLoading.value = true
-        _mods.value = sampleMods()
+        _mods.value = emptyList()
         _isLoading.value = false
     }
 
