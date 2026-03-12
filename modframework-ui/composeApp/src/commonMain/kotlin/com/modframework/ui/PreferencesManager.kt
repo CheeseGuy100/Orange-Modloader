@@ -1,15 +1,13 @@
 package com.modframework.ui
 
-import com.russhwolf.settings.Settings
-
 object PreferencesManager {
-    private val settings = Settings()
+    private val prefs = mutableMapOf<String, Any>()
 
     fun setBoolean(key: String, value: Boolean) {
-        settings.putBoolean(key, value)
+        prefs[key] = value
     }
 
     fun getBoolean(key: String, default: Boolean = false): Boolean {
-        return settings.getBoolean(key, default)
+        return prefs[key] as? Boolean ?: default
     }
 }
