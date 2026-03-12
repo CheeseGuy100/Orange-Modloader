@@ -224,7 +224,6 @@ private fun ModList(
         }
     }
 }
-) {
 
 @Composable
 private fun EmptyDetailState() {
