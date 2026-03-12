@@ -187,6 +187,44 @@ private fun ModList(
     onSelect: (ModInfo) -> Unit,
     onToggle: (String) -> Unit
 ) {
+    if (mods.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(text = "📭", style = MaterialTheme.typography.displayMedium)
+                Text(
+                    text = "Sorry, there aren't any mods here",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = "Add mods to get started!",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(mods, key = { it.id }) { mod ->
+                ModCard(
+                    mod = mod,
+                    isSelected = mod.id == selectedModId,
+                    onClick = { onSelect(mod) },
+                    onToggle = { onToggle(mod.id) }
+                )
+            }
+            item { Spacer(Modifier.height(8.dp)) }
+        }
+    }
+}
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
