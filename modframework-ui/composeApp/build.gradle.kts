@@ -63,7 +63,7 @@ compose.desktop {
     application {
         mainClass = "com.modframework.ui.MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Msi, TargetFormat.Deb)
             packageName = "MangoLoader"
             packageVersion = "1.3.0"
         }
