@@ -1,3 +1,4 @@
+
 package com.modframework.ui
 
 import androidx.compose.foundation.clickable
@@ -48,7 +49,7 @@ fun SettingsScreen(
                     text = "Settings",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF6B00)
+                    color = Color(0xFFFFB300)
                 )
             }
 
@@ -77,8 +78,12 @@ fun SettingsScreen(
                     checked = isDarkMode,
                     onCheckedChange = onDarkModeToggle,
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color(0xFFFF6B00),
-                        checkedTrackColor = Color(0xFFFF6B00).copy(alpha = 0.5f)
+                        checkedThumbColor = Color(0xFFFFB300),
+                        checkedTrackColor = Color(0xFFFFB300).copy(alpha = 0.5f),
+                        checkedBorderColor = Color(0xFFFFD54F),
+                        uncheckedThumbColor = Color(0xFF9E9E9E),
+                        uncheckedTrackColor = Color(0xFF333333),
+                        uncheckedBorderColor = Color(0xFF555555)
                     )
                 )
             }
@@ -90,11 +95,11 @@ fun SettingsScreen(
                     text = "About",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF6B00)
+                    color = Color(0xFFFFB300)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Orange ModLoader",
+                    text = "MangoLoader",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium
                 )
@@ -129,13 +134,13 @@ fun SettingsScreen(
                     text = "Support",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF6B00)
+                    color = Color(0xFFFFB300)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "☕ ko-fi.com/cheeseguycheese23983",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFFF6B00),
+                    color = Color(0xFFFFB300),
                     modifier = Modifier.clickable {
                         uriHandler.openUri("https://ko-fi.com/cheeseguycheese23983")
                     }
@@ -159,7 +164,7 @@ fun SettingsScreen(
                         text = "CheeseGuy100 was here 🧀",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFF6B00)
+                        color = Color(0xFFFFB300)
                     )
                     Text("🧀🧀🧀🧀🧀", fontSize = 40.sp)
                     Text("🧀🧀🧀🧀🧀", fontSize = 40.sp)
