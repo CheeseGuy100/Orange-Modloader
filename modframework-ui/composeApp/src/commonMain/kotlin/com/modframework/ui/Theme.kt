@@ -51,7 +51,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun OrangeModLoaderTheme(
+fun MangoLoaderTheme(
     darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
