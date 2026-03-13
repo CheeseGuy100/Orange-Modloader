@@ -59,3 +59,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: modframework-ui/composeApp/build/compose/binaries/main/msi/*.msi
+# MangoLoader Build Pipeline
+# Built by CheeseGuy100 on a Samsung phone 📱
+# With help from Claude (Anthropic) 🤖
+# It was such a pain in the butt 💀
