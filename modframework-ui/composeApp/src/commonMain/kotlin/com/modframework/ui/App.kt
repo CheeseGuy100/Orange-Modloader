@@ -147,7 +147,7 @@ private fun ModListHeader(
                     text = "🥭 MangoLoader",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFFB300)
+                    color = Color(0xFF7CB342)
                 )
                 Text(
                     text = "$enabledCount / $totalCount mods active",
@@ -159,16 +159,23 @@ private fun ModListHeader(
                 OutlinedButton(
                     onClick = onDisableAll,
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = Color(0xFF7CB342)
+                    )
                 ) {
                     Text("None", style = MaterialTheme.typography.labelSmall)
                 }
                 Button(
                     onClick = onEnableAll,
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFB300),
+                        contentColor = Color(0xFF1A1000)
+                    )
                 ) {
-                    Text("All", style = MaterialTheme.typography.labelSmall)
+                    Text("All", style = MaterialTheme.typography.labelSmall, color = Color(0xFF7CB342))
                 }
                 IconButton(onClick = onBrowser) {
                     Text("🥭")
@@ -177,7 +184,7 @@ private fun ModListHeader(
                     Icon(
                         imageVector = Icons.Default.Settings,
                         contentDescription = "Settings",
-                        tint = Color(0xFFFFB300)
+                        tint = Color(0xFF7CB342)
                     )
                 }
             }
@@ -185,7 +192,7 @@ private fun ModListHeader(
         LinearProgressIndicator(
             progress = { if (totalCount > 0) enabledCount.toFloat() / totalCount else 0f },
             modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.secondary,
+            color = Color(0xFF7CB342),
             trackColor = MaterialTheme.colorScheme.surfaceVariant
         )
     }
@@ -209,7 +216,7 @@ private fun ModList(
                 Text(
                     text = "Sorry, there aren't any mods here",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = Color(0xFF7CB342)
                 )
                 Text(
                     text = "Add mods to get started!",
@@ -248,7 +255,7 @@ private fun EmptyDetailState() {
             Text(
                 text = "Select a mod to view details",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color(0xFF7CB342)
             )
         }
     }
