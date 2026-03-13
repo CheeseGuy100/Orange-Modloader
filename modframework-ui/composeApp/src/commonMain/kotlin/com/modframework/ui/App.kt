@@ -138,10 +138,10 @@ private fun ModListHeader(
         ) {
             Column {
                 Text(
-                    text = "🟠 Orange ModLoader",
+                    text = "🥭MangoLoader",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF6B00)
+                    color = Color(0xFFFFB300)
                 )
                 Text(
                     text = "$enabledCount / $totalCount mods active",
