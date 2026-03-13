@@ -64,7 +64,7 @@ compose.desktop {
         mainClass = "com.modframework.ui.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "OrangeModLoader"
+            packageName = "MangoLoader"
             packageVersion = "1.0.0"
         }
     }
