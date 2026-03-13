@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.modframework.ui.components.ModCard
+import com.modframeworkework.ui.components.ModCard
 import com.modframework.ui.components.ModDetailPanel
 import com.modframework.ui.viewmodel.ModViewModel
 
@@ -22,13 +22,16 @@ import com.modframework.ui.viewmodel.ModViewModel
 fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
     var isDarkMode by remember { mutableStateOf(PreferencesManager.getBoolean("darkMode", true)) }
     var showSettings by remember { mutableStateOf(false) }
+    var showBrowser by remember { mutableStateOf(false) }
 
     MangoLoaderTheme(darkTheme = isDarkMode) {
         val mods by viewModel.mods.collectAsState()
         val selectedMod by viewModel.selectedMod.collectAsState()
         val isLoading by viewModel.isLoading.collectAsState()
 
-        if (showSettings) {
+        if (showBrowser) {
+            ModBrowserScreen(onBack = { showBrowser = false })
+        } else if (showSettings) {
             SettingsScreen(
                 isDarkMode = isDarkMode,
                 onDarkModeToggle = {
@@ -40,7 +43,7 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
         } else if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
-                    color = Color(0xFFFF6B00),
+                    color = Color(0xFFFFB300),
                     modifier = Modifier.size(48.dp)
                 )
             }
@@ -65,7 +68,8 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
                                 totalCount = viewModel.totalCount,
                                 onEnableAll = { viewModel.enableAll() },
                                 onDisableAll = { viewModel.disableAll() },
-                                onSettings = { showSettings = true }
+                                onSettings = { showSettings = true },
+                                onBrowser = { showBrowser = true }
                             )
                             ModList(
                                 mods = mods,
@@ -92,7 +96,8 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
                             totalCount = viewModel.totalCount,
                             onEnableAll = { viewModel.enableAll() },
                             onDisableAll = { viewModel.disableAll() },
-                            onSettings = { showSettings = true }
+                            onSettings = { showSettings = true },
+                            onBrowser = { showBrowser = true }
                         )
                         if (selectedMod != null) {
                             Column {
@@ -128,7 +133,8 @@ private fun ModListHeader(
     totalCount: Int,
     onEnableAll: () -> Unit,
     onDisableAll: () -> Unit,
-    onSettings: () -> Unit
+    onSettings: () -> Unit,
+    onBrowser: () -> Unit
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Row(
@@ -138,7 +144,7 @@ private fun ModListHeader(
         ) {
             Column {
                 Text(
-                    text = "🥭MangoLoader",
+                    text = "🥭 MangoLoader",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFFFB300)
@@ -149,7 +155,7 @@ private fun ModListHeader(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 OutlinedButton(
                     onClick = onDisableAll,
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
@@ -164,11 +170,14 @@ private fun ModListHeader(
                 ) {
                     Text("All", style = MaterialTheme.typography.labelSmall)
                 }
+                IconButton(onClick = onBrowser) {
+                    Text("🥭")
+                }
                 IconButton(onClick = onSettings) {
                     Icon(
                         imageVector = Icons.Default.Settings,
                         contentDescription = "Settings",
-                        tint = Color(0xFFFF6B00)
+                        tint = Color(0xFFFFB300)
                     )
                 }
             }
