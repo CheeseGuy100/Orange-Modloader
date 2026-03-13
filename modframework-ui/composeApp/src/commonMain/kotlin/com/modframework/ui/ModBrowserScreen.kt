@@ -1,6 +1,5 @@
 package com.modframework.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -42,13 +41,13 @@ fun ModBrowserScreen(onBack: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextButton(onClick = onBack) {
-                Text("← Back")
+                Text("← Back", color = Color(0xFF7CB342))
             }
             Text(
                 text = "🥭 Mod Browser",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFFFB300)
+                color = Color(0xFF7CB342)
             )
         }
 
@@ -76,7 +75,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                 text = mod.name,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFFFFB300)
+                                color = Color(0xFF7CB342)
                             )
                             Text(
                                 text = mod.category,
@@ -115,7 +114,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                             ) {
                                 Text(
                                     "Install",
-                                    color = Color(0xFF1A1000),
+                                    color = Color(0xFF7CB342),
                                     fontWeight = FontWeight.Bold
                                 )
                             }
