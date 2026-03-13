@@ -65,7 +65,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "MangoLoader"
-            packageVersion = "1.0.0"
+            packageVersion = "0.3.0"
         }
     }
 }
