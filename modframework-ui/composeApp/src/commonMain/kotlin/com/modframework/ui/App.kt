@@ -23,7 +23,7 @@ fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
     var isDarkMode by remember { mutableStateOf(PreferencesManager.getBoolean("darkMode", true)) }
     var showSettings by remember { mutableStateOf(false) }
 
-    OrangeModLoaderTheme(darkTheme = isDarkMode) {
+    MangoLoaderTheme(darkTheme = isDarkMode) {
         val mods by viewModel.mods.collectAsState()
         val selectedMod by viewModel.selectedMod.collectAsState()
         val isLoading by viewModel.isLoading.collectAsState()
