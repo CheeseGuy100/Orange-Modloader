@@ -49,7 +49,7 @@ android {
         applicationId = "com.modframework.ui"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 3
         versionName = "0.3.0-Alpha"
     }
 
