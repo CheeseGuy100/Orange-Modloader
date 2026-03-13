@@ -30,7 +30,7 @@ jobs:
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        run: gradle composeApp:assembleRelease -Pandroid.injected.signing.store.file=../composeApp/mangoloader.jks -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEYSTORE_PASSWORD
+        run: gradle composeApp:assembleRelease -Pandroid.injected.signing.store.file=$(pwd)../composeApp/mangoloader.jks -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEYSTORE_PASSWORD
       - name: Rename APK
         run: mv modframework-ui/composeApp/build/outputs/apk/release/composeApp-release.apk modframework-ui/composeApp/build/outputs/apk/release/MangoLoader-${{ github.ref_name }}.apk
       - name: Upload APK to release
