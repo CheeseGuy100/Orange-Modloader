@@ -1,4 +1,3 @@
-
 package com.modframework.ui
 
 import androidx.compose.foundation.clickable
@@ -43,13 +42,13 @@ fun SettingsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextButton(onClick = onBack) {
-                    Text("← Back")
+                    Text("← Back", color = Color(0xFF7CB342))
                 }
                 Text(
                     text = "Settings",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFFB300)
+                    color = Color(0xFF7CB342)
                 )
             }
 
@@ -66,7 +65,8 @@ fun SettingsScreen(
                     Text(
                         text = "Dark Mode",
                         style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF7CB342)
                     )
                     Text(
                         text = "Toggle dark or light theme",
@@ -95,16 +95,17 @@ fun SettingsScreen(
                     text = "About",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFFB300)
+                    color = Color(0xFF7CB342)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "MangoLoader",
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF7CB342)
                 )
                 Text(
-                    text = "Version 0.2.0-Alpha",
+                    text = "Version 0.4.0-Alpha",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.clickable { tapCount++ }
@@ -134,7 +135,7 @@ fun SettingsScreen(
                     text = "Support",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFFB300)
+                    color = Color(0xFF7CB342)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
