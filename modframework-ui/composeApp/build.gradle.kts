@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.compose")
     kotlin("plugin.compose")
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -19,8 +20,11 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.ui)
                 implementation(compose.components.resources)
-                implementation("com.russhwolf:multiplatform-settings:1.1.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+                implementation("io.ktor:ktor-client-core:2.3.7")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
             }
         }
 
@@ -29,6 +33,7 @@ kotlin {
                 implementation(compose.preview)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
                 implementation("androidx.activity:activity-compose:1.8.0")
+                implementation("io.ktor:ktor-client-android:2.3.7")
             }
         }
 
@@ -36,6 +41,7 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.1")
+                implementation("io.ktor:ktor-client-java:2.3.7")
             }
         }
     }
@@ -49,8 +55,8 @@ android {
         applicationId = "com.modframework.ui"
         minSdk = 24
         targetSdk = 34
-        versionCode = 3
-        versionName = "0.3.0-Alpha"
+        versionCode = 4
+        versionName = "0.4.0-Alpha"
     }
 
     compileOptions {
@@ -65,7 +71,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi, TargetFormat.Deb)
             packageName = "MangoLoader"
-            packageVersion = "1.3.0"
+            packageVersion = "1.4.0"
         }
     }
 }
