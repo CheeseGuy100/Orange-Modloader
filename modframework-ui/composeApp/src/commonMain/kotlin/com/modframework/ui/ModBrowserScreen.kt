@@ -11,10 +11,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.net.URL
-import org.json.JSONObject
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class ModrinthMod(
+    val project_id: String,
+    val title: String,
+    val author: String,
+    val description: String,
+    val categories: List<String>,
+    val downloads: Int
+)
+
+@Serializable
+data class ModrinthResponse(
+    val hits: List<ModrinthMod>
+)
 
 data class BrowseMod(
     val id: String,
@@ -31,32 +49,31 @@ fun ModBrowserScreen(onBack: () -> Unit) {
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
 
+    val client = remember {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json { ignoreUnknownKeys = true })
+            }
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { client.close() }
+    }
+
     LaunchedEffect(Unit) {
         try {
-            val result = withContext(Dispatchers.IO) {
-                val url = URL("https://api.modrinth.com/v2/search?limit=20&facets=[[%22project_type:mod%22]]")
-                val response = url.readText()
-                val json = JSONObject(response)
-                val hits = json.getJSONArray("hits")
-                val list = mutableListOf<BrowseMod>()
-                for (i in 0 until hits.length()) {
-                    val hit = hits.getJSONObject(i)
-                    val categories = hit.getJSONArray("categories")
-                    val category = if (categories.length() > 0) categories.getString(0) else "Misc"
-                    list.add(
-                        BrowseMod(
-                            id = hit.getString("project_id"),
-                            name = hit.getString("title"),
-                            author = hit.getString("author"),
-                            description = hit.getString("description"),
-                            category = category,
-                            downloads = hit.getInt("downloads")
-                        )
-                    )
-                }
-                list
+            val response: ModrinthResponse = client.get("https://api.modrinth.com/v2/search?limit=20&facets=[[\"project_type:mod\"]]").body()
+            mods = response.hits.map { mod ->
+                BrowseMod(
+                    id = mod.project_id,
+                    name = mod.title,
+                    author = mod.author,
+                    description = mod.description,
+                    category = mod.categories.firstOrNull() ?: "Misc",
+                    downloads = mod.downloads
+                )
             }
-            mods = result
         } catch (e: Exception) {
             error = "Failed to load mods: ${e.message}"
         } finally {
