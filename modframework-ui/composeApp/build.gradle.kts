@@ -10,7 +10,7 @@ plugins {
 
 kotlin {
     androidTarget()
-    jvm("desktop")
+    jvm()
 
     sourceSets {
         val commonMain by getting {
