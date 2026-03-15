@@ -26,7 +26,8 @@ data class ModrinthMod(
     val author: String,
     val description: String,
     val categories: List<String>,
-    val downloads: Int
+    val downloads: Int,
+    val icon_url: String? = null
 )
 
 @Serializable
@@ -40,14 +41,18 @@ data class BrowseMod(
     val author: String,
     val description: String,
     val category: String,
-    val downloads: Int
+    val downloads: Int,
+    val iconUrl: String? = null
 )
+
+enum class ModFilter { ALL, JAVA, BEDROCK }
 
 @Composable
 fun ModBrowserScreen(onBack: () -> Unit) {
     var mods by remember { mutableStateOf<List<BrowseMod>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
+    var selectedFilter by remember { mutableStateOf(ModFilter.ALL) }
 
     val client = remember {
         HttpClient {
@@ -61,9 +66,16 @@ fun ModBrowserScreen(onBack: () -> Unit) {
         onDispose { client.close() }
     }
 
-    LaunchedEffect(Unit) {
+    suspend fun loadMods(filter: ModFilter) {
+        isLoading = true
+        error = null
         try {
-            val response: ModrinthResponse = client.get("https://api.modrinth.com/v2/search?limit=20&facets=[[\"project_type:mod\"]]").body()
+            val facets = when (filter) {
+                ModFilter.ALL -> "[[\"project_type:mod\"]]"
+                ModFilter.JAVA -> "[[\"project_type:mod\"],[\"categories:forge\"]]"
+                ModFilter.BEDROCK -> "[[\"project_type:mod\"],[\"categories:datapack\"]]"
+            }
+            val response: ModrinthResponse = client.get("https://api.modrinth.com/v2/search?limit=20&facets=$facets").body()
             mods = response.hits.map { mod ->
                 BrowseMod(
                     id = mod.project_id,
@@ -71,7 +83,8 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                     author = mod.author,
                     description = mod.description,
                     category = mod.categories.firstOrNull() ?: "Misc",
-                    downloads = mod.downloads
+                    downloads = mod.downloads,
+                    iconUrl = mod.icon_url
                 )
             }
         } catch (e: Exception) {
@@ -79,6 +92,10 @@ fun ModBrowserScreen(onBack: () -> Unit) {
         } finally {
             isLoading = false
         }
+    }
+
+    LaunchedEffect(selectedFilter) {
+        loadMods(selectedFilter)
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -101,6 +118,47 @@ fun ModBrowserScreen(onBack: () -> Unit) {
 
         HorizontalDivider()
 
+        // Filter tabs
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ModFilter.values().forEach { filter ->
+                val label = when (filter) {
+                    ModFilter.ALL -> "🌐 All"
+                    ModFilter.JAVA -> "☕ Java"
+                    ModFilter.BEDROCK -> "🪨 Bedrock"
+                }
+                if (selectedFilter == filter) {
+                    Button(
+                        onClick = { selectedFilter = filter },
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFFFB300)
+                        )
+                    ) {
+                        Text(label, color = Color(0xFF7CB342), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                    }
+                } else {
+                    OutlinedButton(
+                        onClick = { selectedFilter = filter },
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = Color(0xFF7CB342)
+                        )
+                    ) {
+                        Text(label, style = MaterialTheme.typography.labelSmall)
+                    }
+                }
+            }
+        }
+
+        HorizontalDivider()
+
         when {
             isLoading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -113,9 +171,18 @@ fun ModBrowserScreen(onBack: () -> Unit) {
             }
             error != null -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Text("😭", style = MaterialTheme.typography.displayMedium)
                         Text(error!!, color = MaterialTheme.colorScheme.error)
+                        Button(
+                            onClick = { selectedFilter = selectedFilter },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFB300))
+                        ) {
+                            Text("Retry", color = Color(0xFF7CB342))
+                        }
                     }
                 }
             }
