@@ -1,3 +1,5 @@
 package com.modframework.ui
 
-expect fun downloadMod(url: String, fileName: String)
+fun downloadMod(url: String, fileName: String) {
+    // download handled per platform
+}
