@@ -56,7 +56,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 6
-        versionName = "0.6.0-Alpha"
+        versionName = "0.6.1-Alpha"
     }
 
     compileOptions {
@@ -71,7 +71,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi, TargetFormat.Deb)
             packageName = "MangoLoader"
-            packageVersion = "1.6.0"
+            packageVersion = "1.6.1"
         }
     }
 }
