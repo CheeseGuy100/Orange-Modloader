@@ -293,7 +293,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                         } else {
                                             Text(
                                                 "Install",
-                                                color = Color(0xFF7CB342),
+                                                color = Color.White,
                                                 fontWeight = FontWeight.Bold
                                             )
                                         }
