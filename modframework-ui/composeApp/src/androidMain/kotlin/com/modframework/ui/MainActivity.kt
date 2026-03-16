@@ -4,13 +4,16 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
+import android.os.Environment
 lateinit var appContext: Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appContext = this
+        downloadsPath = Environment.getExternalStoragePublicDirectory(
+    Environment.DIRECTORY_DOWNLOADS
+).absolutePath
         setContent {
             App()
         }
