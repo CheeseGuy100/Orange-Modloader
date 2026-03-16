@@ -16,6 +16,7 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -53,6 +54,9 @@ fun ModBrowserScreen(onBack: () -> Unit) {
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
     var selectedFilter by remember { mutableStateOf(ModFilter.ALL) }
+    var downloadingModId by remember { mutableStateOf<String?>(null) }
+    var downloadMessage by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
 
     val client = remember {
         HttpClient {
@@ -75,7 +79,9 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                 ModFilter.JAVA -> "[[\"project_type:mod\"],[\"categories:forge\"]]"
                 ModFilter.BEDROCK -> "[[\"project_type:mod\"],[\"categories:datapack\"]]"
             }
-            val response: ModrinthResponse = client.get("https://api.modrinth.com/v2/search?limit=20&facets=$facets").body()
+            val response: ModrinthResponse = client.get(
+                "https://api.modrinth.com/v2/search?limit=20&facets=$facets"
+            ).body()
             mods = response.hits.map { mod ->
                 BrowseMod(
                     id = mod.project_id,
@@ -118,7 +124,17 @@ fun ModBrowserScreen(onBack: () -> Unit) {
 
         HorizontalDivider()
 
-        // Filter tabs
+        if (downloadMessage != null) {
+            Text(
+                text = downloadMessage!!,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                color = Color(0xFF7CB342),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -140,7 +156,12 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                             containerColor = Color(0xFFFFB300)
                         )
                     ) {
-                        Text(label, color = Color(0xFF7CB342), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                        Text(
+                            label,
+                            color = Color(0xFF7CB342),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 } else {
                     OutlinedButton(
@@ -179,7 +200,9 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                         Text(error!!, color = MaterialTheme.colorScheme.error)
                         Button(
                             onClick = { selectedFilter = selectedFilter },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFB300))
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFFFB300)
+                            )
                         ) {
                             Text("Retry", color = Color(0xFF7CB342))
                         }
@@ -240,18 +263,40 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Button(
-                                        onClick = { },
+                                        onClick = {
+                                            scope.launch {
+                                                downloadingModId = mod.id
+                                                downloadMessage = "Downloading ${mod.name}..."
+                                                val result = getModDownloadUrl(client, mod.id)
+                                                if (result != null) {
+                                                    downloadModFile(result.first, result.second)
+                                                    downloadMessage = "✅ ${mod.name} downloaded to Downloads folder!"
+                                                } else {
+                                                    downloadMessage = "❌ Failed to get download URL"
+                                                }
+                                                downloadingModId = null
+                                            }
+                                        },
                                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
                                         shape = RoundedCornerShape(8.dp),
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(0xFFFFB300)
-                                        )
+                                            containerColor = if (downloadingModId == mod.id) Color(0xFF558B2F) else Color(0xFFFFB300)
+                                        ),
+                                        enabled = downloadingModId == null
                                     ) {
-                                        Text(
-                                            "Install",
-                                            color = Color(0xFF7CB342),
-                                            fontWeight = FontWeight.Bold
-                                        )
+                                        if (downloadingModId == mod.id) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(16.dp),
+                                                color = Color(0xFF7CB342),
+                                                strokeWidth = 2.dp
+                                            )
+                                        } else {
+                                            Text(
+                                                "Install",
+                                                color = Color(0xFF7CB342),
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
                                     }
                                 }
                             }
