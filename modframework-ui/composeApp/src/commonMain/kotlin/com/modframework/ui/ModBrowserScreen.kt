@@ -56,6 +56,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
     var selectedFilter by remember { mutableStateOf(ModFilter.ALL) }
     var downloadingModId by remember { mutableStateOf<String?>(null) }
     var downloadMessage by remember { mutableStateOf<String?>(null) }
+    var searchQuery by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
     val client = remember {
@@ -104,6 +105,11 @@ fun ModBrowserScreen(onBack: () -> Unit) {
         loadMods(selectedFilter)
     }
 
+    val filteredMods = mods.filter {
+        it.name.contains(searchQuery, ignoreCase = true) ||
+        it.author.contains(searchQuery, ignoreCase = true)
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -124,21 +130,32 @@ fun ModBrowserScreen(onBack: () -> Unit) {
 
         HorizontalDivider()
 
-        if (downloadMessage != null) {
-            Text(
-                text = downloadMessage!!,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
-                color = Color(0xFF7CB342),
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-
-        Row(
+        // Search bar
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
+            placeholder = { Text("Search mods...", color = Color(0xFF666666)) },
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF7CB342),
+                unfocusedBorderColor = Color(0xFF2A2A2A),
+                focusedContainerColor = Color(0xFF2A2A2A),
+                unfocusedContainerColor = Color(0xFF2A2A2A),
+                cursorColor = Color(0xFF7CB342),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White
+            ),
+            shape = RoundedCornerShape(12.dp)
+        )
+
+        // Filter tabs
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ModFilter.values().forEach { filter ->
@@ -180,6 +197,17 @@ fun ModBrowserScreen(onBack: () -> Unit) {
 
         HorizontalDivider()
 
+        if (downloadMessage != null) {
+            Text(
+                text = downloadMessage!!,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                color = Color(0xFF7CB342),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
         when {
             isLoading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -215,7 +243,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(mods) { mod ->
+                    items(filteredMods) { mod ->
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
@@ -270,7 +298,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                                 val result = getModDownloadUrl(client, mod.id)
                                                 if (result != null) {
                                                     downloadModFile(result.first, result.second)
-                                                    downloadMessage = "✅ ${mod.name} downloaded to Downloads folder!"
+                                                    downloadMessage = "✅ ${mod.name} downloaded to Downloads!"
                                                 } else {
                                                     downloadMessage = "❌ Failed to get download URL"
                                                 }
@@ -287,7 +315,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                         if (downloadingModId == mod.id) {
                                             CircularProgressIndicator(
                                                 modifier = Modifier.size(16.dp),
-                                                color = Color(0xFF7CB342),
+                                                color = Color.White,
                                                 strokeWidth = 2.dp
                                             )
                                         } else {
