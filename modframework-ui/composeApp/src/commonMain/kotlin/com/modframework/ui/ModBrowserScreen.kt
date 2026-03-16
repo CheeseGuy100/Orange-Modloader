@@ -1,5 +1,6 @@
 package com.modframework.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -57,6 +58,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
     var downloadingModId by remember { mutableStateOf<String?>(null) }
     var downloadMessage by remember { mutableStateOf<String?>(null) }
     var searchQuery by remember { mutableStateOf("") }
+    var selectedMod by remember { mutableStateOf<BrowseMod?>(null) }
     val scope = rememberCoroutineScope()
 
     val client = remember {
@@ -110,6 +112,14 @@ fun ModBrowserScreen(onBack: () -> Unit) {
         it.author.contains(searchQuery, ignoreCase = true)
     }
 
+    if (selectedMod != null) {
+        ModDetailScreen(
+            mod = selectedMod!!,
+            onBack = { selectedMod = null }
+        )
+        return
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -130,7 +140,6 @@ fun ModBrowserScreen(onBack: () -> Unit) {
 
         HorizontalDivider()
 
-        // Search bar
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -151,7 +160,6 @@ fun ModBrowserScreen(onBack: () -> Unit) {
             shape = RoundedCornerShape(12.dp)
         )
 
-        // Filter tabs
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -245,7 +253,9 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                 ) {
                     items(filteredMods) { mod ->
                         Card(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { selectedMod = mod },
                             shape = RoundedCornerShape(12.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.surface
@@ -298,7 +308,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                                 val result = getModDownloadUrl(client, mod.id)
                                                 if (result != null) {
                                                     downloadModFile(result.first, result.second)
-                                                    downloadMessage = "✅ ${mod.name} downloaded to Downloads!"
+                                                    downloadMessage = "✅ ${mod.name} downloaded!"
                                                 } else {
                                                     downloadMessage = "❌ Failed to get download URL"
                                                 }
