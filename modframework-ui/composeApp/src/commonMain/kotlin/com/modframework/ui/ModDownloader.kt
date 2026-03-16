@@ -30,11 +30,12 @@ suspend fun getModDownloadUrl(client: HttpClient, projectId: String): Pair<Strin
     }
 }
 
+var downloadsPath: String = System.getProperty("user.home") + "/Downloads"
+
 fun downloadModFile(url: String, fileName: String) {
     try {
-        val downloadsFolder = File(System.getProperty("user.home"), "Downloads")
-        downloadsFolder.mkdirs()
-        val outputFile = File(downloadsFolder, fileName)
+        val outputFile = File(downloadsPath, fileName)
+        outputFile.parentFile?.mkdirs()
         URL(url).openStream().use { input ->
             outputFile.outputStream().use { output ->
                 input.copyTo(output)
