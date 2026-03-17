@@ -11,9 +11,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appContext = this
-        downloadsPath = Environment.getExternalStoragePublicDirectory(
-    Environment.DIRECTORY_DOWNLOADS
-).absolutePath
         setContent {
             App()
         }
