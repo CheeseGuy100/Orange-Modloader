@@ -5,13 +5,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Coffee
+import androidx.compose.material.icons.filled.Terrain
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -60,6 +67,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedMod by remember { mutableStateOf<BrowseMod?>(null) }
     val scope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
 
     val client = remember {
         HttpClient {
@@ -166,23 +174,31 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                 .padding(horizontal = 16.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ModFilter.values().forEach { filter ->
-                val label = when (filter) {
-                    ModFilter.ALL -> "🌐 All"
-                    ModFilter.JAVA -> "☕ Java"
-                    ModFilter.BEDROCK -> "🪨 Bedrock"
-                }
-                if (selectedFilter == filter) {
+            data class FilterOption(val filter: ModFilter, val label: String, val icon: ImageVector)
+            val filters = listOf(
+                FilterOption(ModFilter.ALL, "All", Icons.Default.Language),
+                FilterOption(ModFilter.JAVA, "Java", Icons.Default.Coffee),
+                FilterOption(ModFilter.BEDROCK, "Bedrock", Icons.Default.Terrain)
+            )
+            filters.forEach { option ->
+                if (selectedFilter == option.filter) {
                     Button(
-                        onClick = { selectedFilter = filter },
+                        onClick = { selectedFilter = option.filter },
                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFFFFB300)
                         )
                     ) {
+                        Icon(
+                            imageVector = option.icon,
+                            contentDescription = option.label,
+                            tint = Color(0xFF7CB342),
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            label,
+                            option.label,
                             color = Color(0xFF7CB342),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold
@@ -190,14 +206,20 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                     }
                 } else {
                     OutlinedButton(
-                        onClick = { selectedFilter = filter },
+                        onClick = { selectedFilter = option.filter },
                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = Color(0xFF7CB342)
                         )
                     ) {
-                        Text(label, style = MaterialTheme.typography.labelSmall)
+                        Icon(
+                            imageVector = option.icon,
+                            contentDescription = option.label,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(option.label, style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }
@@ -232,7 +254,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text("😭", style = MaterialTheme.typography.displayMedium)
+                        Text("😕", fontSize = 48.sp, color = Color.Gray)
                         Text(error!!, color = MaterialTheme.colorScheme.error)
                         Button(
                             onClick = { selectedFilter = selectedFilter },
@@ -240,8 +262,23 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                 containerColor = Color(0xFFFFB300)
                             )
                         ) {
-                            Text("Retry", color = Color(0xFF7CB342))
+                            Text("Retry", color = Color.White)
                         }
+                    }
+                }
+            }
+            filteredMods.isEmpty() -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text("😕", fontSize = 48.sp, color = Color.Gray)
+                        Text(
+                            "No mods found",
+                            color = Color.Gray,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                 }
             }
@@ -304,11 +341,11 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                         onClick = {
                                             scope.launch {
                                                 downloadingModId = mod.id
-                                                downloadMessage = "Downloading ${mod.name}..."
+                                                downloadMessage = "Getting download link..."
                                                 val result = getModDownloadUrl(client, mod.id)
                                                 if (result != null) {
-                                                    downloadModFile(result.first, result.second)
-                                                    downloadMessage = "✅ ${mod.name} downloaded!"
+                                                    uriHandler.openUri(result.first)
+                                                    downloadMessage = "✅ Opening download for ${mod.name}"
                                                 } else {
                                                     downloadMessage = "❌ Failed to get download URL"
                                                 }
