@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import android.os.Environment
 lateinit var appContext: Context
 
 class MainActivity : ComponentActivity() {
