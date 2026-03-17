@@ -26,4 +26,4 @@ suspend fun getModDownloadUrl(client: HttpClient, projectId: String): Pair<Strin
     } catch (e: Exception) {
         null
     }
-}
+} 
