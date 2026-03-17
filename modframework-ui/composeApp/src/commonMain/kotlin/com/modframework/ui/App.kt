@@ -20,9 +20,15 @@ import com.modframework.ui.viewmodel.ModViewModel
 
 @Composable
 fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
+    var showSplash by remember { mutableStateOf(true) }
     var isDarkMode by remember { mutableStateOf(PreferencesManager.getBoolean("darkMode", true)) }
     var showSettings by remember { mutableStateOf(false) }
     var showBrowser by remember { mutableStateOf(false) }
+
+    if (showSplash) {
+        SplashScreen(onFinished = { showSplash = false })
+        return
+    }
 
     MangoLoaderTheme(darkTheme = isDarkMode) {
         val mods by viewModel.mods.collectAsState()
@@ -172,10 +178,10 @@ private fun ModListHeader(
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFFFB300),
-                        contentColor = Color(0xFF1A1000)
+                        contentColor = Color(0xFF7CB342)
                     )
                 ) {
-                    Text("All", style = MaterialTheme.typography.labelSmall, color = Color(0xFF7CB342))
+                    Text("All", style = MaterialTheme.typography.labelSmall)
                 }
                 IconButton(onClick = onBrowser) {
                     Text("🥭")
