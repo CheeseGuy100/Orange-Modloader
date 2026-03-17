@@ -21,12 +21,18 @@ import com.modframework.ui.viewmodel.ModViewModel
 @Composable
 fun App(viewModel: ModViewModel = remember { ModViewModel() }) {
     var showSplash by remember { mutableStateOf(true) }
+    var showDisclaimer by remember { mutableStateOf(!PreferencesManager.getBoolean("disclaimerAccepted", false)) }
     var isDarkMode by remember { mutableStateOf(PreferencesManager.getBoolean("darkMode", true)) }
     var showSettings by remember { mutableStateOf(false) }
     var showBrowser by remember { mutableStateOf(false) }
 
     if (showSplash) {
         SplashScreen(onFinished = { showSplash = false })
+        return
+    }
+
+    if (showDisclaimer) {
+        DisclaimerScreen(onAccept = { showDisclaimer = false })
         return
     }
 
