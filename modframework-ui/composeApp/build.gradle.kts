@@ -19,16 +19,15 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.ui)
-implementation("androidx.compose.material:material-icons-extended:1.6.0")
-implementation(compose.components.resources)
+                implementation(compose.components.resources)
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
                 implementation("io.ktor:ktor-client-core:2.3.7")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
-implementation("com.mikepenz:multiplatform-markdown-renderer:0.27.0")
-
-implementation("com.mikepenz:multiplatform-markdown-renderer-m3:0.27.0")
+                implementation("androidx.compose.material:material-icons-extended:1.5.4")
+                implementation("com.mikepenz:multiplatform-markdown-renderer:0.27.0")
+                implementation("com.mikepenz:multiplatform-markdown-renderer-m3:0.27.0")
             }
         }
 
