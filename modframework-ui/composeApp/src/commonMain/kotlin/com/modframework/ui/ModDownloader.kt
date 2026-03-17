@@ -4,8 +4,6 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
-import java.io.File
-import java.net.URL
 
 @Serializable
 data class ModrinthVersion(
@@ -30,18 +28,22 @@ suspend fun getModDownloadUrl(client: HttpClient, projectId: String): Pair<Strin
     }
 }
 
-var downloadsPath: String = System.getProperty("user.home") + "/Downloads"
+expect fun downloadModFile(url: String, fileName: String)
+Then create androidMain/kotlin/com/modframework/ui/ModDownloader.kt:
+package com.modframework.ui
 
-fun downloadModFile(url: String, fileName: String) {
-    try {
-        val outputFile = File(downloadsPath, fileName)
-        outputFile.parentFile?.mkdirs()
-        URL(url).openStream().use { input ->
-            outputFile.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
+
+actual fun downloadModFile(url: String, fileName: String) {
+    val dm = appContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    val request = DownloadManager.Request(Uri.parse(url))
+        .setTitle(fileName)
+        .setDescription("Downloading mod...")
+        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        .setDestinationInExternalPublicDir("Downloads", fileName)
+        .setAllowedOverMetered(true)
+        .setAllowedOverRoaming(true)
+    dm.enqueue(request)
 }
