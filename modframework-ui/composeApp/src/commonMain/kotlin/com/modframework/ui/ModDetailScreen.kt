@@ -8,8 +8,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +27,6 @@ data class ModrinthProject(
     val title: String,
     val description: String,
     val body: String,
-    val author: String = "",
     val downloads: Int,
     val categories: List<String>,
     val icon_url: String? = null,
@@ -45,6 +44,7 @@ fun ModDetailScreen(
     var downloadingMod by remember { mutableStateOf(false) }
     var downloadMessage by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
 
     val client = remember {
         HttpClient {
@@ -69,7 +69,6 @@ fun ModDetailScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,7 +100,6 @@ fun ModDetailScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Mod info card
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -114,7 +112,6 @@ fun ModDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // Mod icon placeholder
                             Card(
                                 modifier = Modifier.size(64.dp),
                                 shape = RoundedCornerShape(8.dp),
@@ -152,7 +149,6 @@ fun ModDetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Categories
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             project?.categories?.take(3)?.forEach { category ->
                                 Card(
@@ -173,7 +169,6 @@ fun ModDetailScreen(
                     }
                 }
 
-                // Download message
                 if (downloadMessage != null) {
                     Text(
                         text = downloadMessage!!,
@@ -182,16 +177,15 @@ fun ModDetailScreen(
                     )
                 }
 
-                // Install button
                 Button(
                     onClick = {
                         scope.launch {
                             downloadingMod = true
-                            downloadMessage = "Downloading ${mod.name}..."
+                            downloadMessage = "Getting download link..."
                             val result = getModDownloadUrl(client, mod.id)
                             if (result != null) {
-                                downloadModFile(result.first, result.second)
-                                downloadMessage = "✅ ${mod.name} downloaded to Downloads!"
+                                uriHandler.openUri(result.first)
+                                downloadMessage = "✅ Opening download for ${mod.name}"
                             } else {
                                 downloadMessage = "❌ Failed to get download URL"
                             }
@@ -221,7 +215,6 @@ fun ModDetailScreen(
                     }
                 }
 
-                // Description
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
