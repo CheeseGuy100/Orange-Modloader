@@ -2,7 +2,10 @@
 # Built by CheeseGuy100 on a Samsung phone 📱
 # With help from Claude (Anthropic) 🤖
 # It was such a pain in the butt 💀
-
+# Windows build removed because it caused TOO MUCH PAIN 😭
+# jvmMain/ModDownloader.kt colon filename broke Windows git
+# Will return when we have a PC and more sanity
+# Android only for now 🥭
 name: Build MangoLoader
 
 on:
@@ -42,24 +45,3 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: modframework-ui/composeApp/build/outputs/apk/release/MangoLoader-${{ github.ref_name }}.apk
-
-  build-windows:
-    name: Build Windows EXE
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.5'
-      - name: Build MSI
-        working-directory: modframework-ui
-        run: gradle packageMsi
-      - name: Upload MSI to release
-        if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
-        with:
-          files: modframework-ui/composeApp/build/compose/binaries/main/msi/*.msi
