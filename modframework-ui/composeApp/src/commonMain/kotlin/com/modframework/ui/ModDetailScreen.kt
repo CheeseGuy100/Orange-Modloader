@@ -65,7 +65,6 @@ fun ModDetailScreen(
         try {
             project = client.get("https://api.modrinth.com/v2/project/${mod.id}").body()
         } catch (e: Exception) {
-            // use mod data as fallback
         } finally {
             isLoading = false
         }
@@ -291,11 +290,11 @@ fun ModDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         val cleanContent = remember(project, mod) {
-    (project?.body ?: mod.description)
-        .replace(Regex("<[^>]*>"), "")
-}
-
-Markdown(content = cleanContent)
+                            (project?.body ?: mod.description)
+                                .replace(Regex("<[^>]*>"), "")
+                        }
+                        Markdown(content = cleanContent)
+                    }
                 }
             }
         }
