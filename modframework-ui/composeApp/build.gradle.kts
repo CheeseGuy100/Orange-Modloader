@@ -10,7 +10,7 @@ plugins {
 
 kotlin {
     androidTarget()
-    jvm()
+    
 
     sourceSets {
         val commonMain by getting {
@@ -40,14 +40,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-android:2.3.7")
             }
         }
-
-        val jvmMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.1")
-                implementation("io.ktor:ktor-client-java:2.3.7")
-            }
-        }
     }
 }
 
@@ -73,7 +65,7 @@ compose.desktop {
     application {
         mainClass = "com.modframework.ui.MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Deb)
             packageName = "MangoLoader"
             packageVersion = "1.7.2"
         }
