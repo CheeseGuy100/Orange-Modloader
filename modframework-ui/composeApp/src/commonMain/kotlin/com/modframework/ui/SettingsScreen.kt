@@ -66,7 +66,7 @@ fun SettingsScreen(
                         text = "Dark Mode",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFF7CB342)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Toggle dark or light theme",
@@ -81,9 +81,9 @@ fun SettingsScreen(
                         checkedThumbColor = Color(0xFFFFB300),
                         checkedTrackColor = Color(0xFFFFB300).copy(alpha = 0.5f),
                         checkedBorderColor = Color(0xFFFFD54F),
-                        uncheckedThumbColor = Color(0xFF9E9E9E),
-                        uncheckedTrackColor = Color(0xFF333333),
-                        uncheckedBorderColor = Color(0xFF555555)
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                        uncheckedBorderColor = MaterialTheme.colorScheme.outline
                     )
                 )
             }
@@ -102,10 +102,10 @@ fun SettingsScreen(
                     text = "MangoLoader",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF7CB342)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Version 0.4.0-Alpha",
+                    text = "Version 0.8.0-Alpha",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.clickable { tapCount++ }
