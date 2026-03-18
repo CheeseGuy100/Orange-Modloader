@@ -38,6 +38,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
                 implementation("androidx.activity:activity-compose:1.8.0")
                 implementation("io.ktor:ktor-client-android:2.3.7")
+              implementation("io.coil-kt:coil-network-okhttp:2.6.0")
             }
         }
     }
