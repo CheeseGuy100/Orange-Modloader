@@ -1,5 +1,6 @@
+l
 package com.modframework.ui
-import com.mikepenz.markdown.m3.Markdown
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +14,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import com.mikepenz.markdown.m3.Markdown
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -30,6 +33,9 @@ data class ModrinthProject(
     val categories: List<String>,
     val icon_url: String? = null,
     val source_url: String? = null,
+    val discord_url: String? = null,
+    val wiki_url: String? = null,
+    val issues_url: String? = null,
     val versions: List<String> = emptyList()
 )
 
@@ -113,6 +119,7 @@ fun ModDetailScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // Mod info card
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -125,6 +132,7 @@ fun ModDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            // Mod icon
                             Card(
                                 modifier = Modifier.size(64.dp),
                                 shape = RoundedCornerShape(8.dp),
@@ -132,11 +140,19 @@ fun ModDetailScreen(
                                     containerColor = Color(0xFF2A2A2A)
                                 )
                             ) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text("🥭", fontSize = 32.sp)
+                                if (project?.icon_url != null) {
+                                    AsyncImage(
+                                        model = project!!.icon_url,
+                                        contentDescription = mod.name,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                } else {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text("🥭", fontSize = 32.sp)
+                                    }
                                 }
                             }
 
@@ -162,6 +178,7 @@ fun ModDetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
+                        // Categories
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             project?.categories?.take(3)?.forEach { category ->
                                 Card(
@@ -179,6 +196,63 @@ fun ModDetailScreen(
                                 }
                             }
                         }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Social links
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            project?.source_url?.let { url ->
+                                OutlinedButton(
+                                    onClick = { uriHandler.openUri(url) },
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                                    shape = RoundedCornerShape(8.dp),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = Color(0xFF7CB342)
+                                    )
+                                ) {
+                                    Text("🌐 Source", style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                            project?.discord_url?.let { url ->
+                                OutlinedButton(
+                                    onClick = { uriHandler.openUri(url) },
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                                    shape = RoundedCornerShape(8.dp),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = Color(0xFF7CB342)
+                                    )
+                                ) {
+                                    Text("💬 Discord", style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                            project?.wiki_url?.let { url ->
+                                OutlinedButton(
+                                    onClick = { uriHandler.openUri(url) },
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                                    shape = RoundedCornerShape(8.dp),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = Color(0xFF7CB342)
+                                    )
+                                ) {
+                                    Text("📖 Wiki", style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                            project?.issues_url?.let { url ->
+                                OutlinedButton(
+                                    onClick = { uriHandler.openUri(url) },
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                                    shape = RoundedCornerShape(8.dp),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = Color(0xFF7CB342)
+                                    )
+                                ) {
+                                    Text("🐛 Issues", style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -190,6 +264,7 @@ fun ModDetailScreen(
                     )
                 }
 
+                // Install button
                 Button(
                     onClick = { showVersionPicker = true },
                     modifier = Modifier.fillMaxWidth(),
@@ -206,6 +281,7 @@ fun ModDetailScreen(
                     )
                 }
 
+                // Description with markdown
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -222,8 +298,8 @@ fun ModDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Markdown(
-    content = project?.body ?: mod.description
-    )
+                            content = project?.body ?: mod.description
+                        )
                     }
                 }
             }
