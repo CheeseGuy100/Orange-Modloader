@@ -18,7 +18,6 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -41,9 +40,8 @@ fun ModDetailScreen(
 ) {
     var project by remember { mutableStateOf<ModrinthProject?>(null) }
     var isLoading by remember { mutableStateOf(true) }
-    var downloadingMod by remember { mutableStateOf(false) }
+    var showVersionPicker by remember { mutableStateOf(false) }
     var downloadMessage by remember { mutableStateOf<String?>(null) }
-    val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
 
     val client = remember {
@@ -66,6 +64,21 @@ fun ModDetailScreen(
         } finally {
             isLoading = false
         }
+    }
+
+    if (showVersionPicker) {
+        VersionPickerDialog(
+            mod = mod,
+            onDismiss = { showVersionPicker = false },
+            onVersionSelected = { version ->
+                val file = version.files.firstOrNull()
+                if (file != null) {
+                    uriHandler.openUri(file.url)
+                    downloadMessage = "✅ Opening download for ${mod.name} ${version.version_number}"
+                }
+                showVersionPicker = false
+            }
+        )
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -178,41 +191,19 @@ fun ModDetailScreen(
                 }
 
                 Button(
-                    onClick = {
-                        scope.launch {
-                            downloadingMod = true
-                            downloadMessage = "Getting download link..."
-                            val result = getModDownloadUrl(client, mod.id)
-                            if (result != null) {
-                                uriHandler.openUri(result.first)
-                                downloadMessage = "✅ Opening download for ${mod.name}"
-                            } else {
-                                downloadMessage = "❌ Failed to get download URL"
-                            }
-                            downloadingMod = false
-                        }
-                    },
+                    onClick = { showVersionPicker = true },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFFFB300)
-                    ),
-                    enabled = !downloadingMod
+                    )
                 ) {
-                    if (downloadingMod) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(20.dp),
-                            color = Color.White,
-                            strokeWidth = 2.dp
-                        )
-                    } else {
-                        Text(
-                            "⬇️ Install Mod",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        )
-                    }
+                    Text(
+                        "⬇️ Install Mod",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
                 }
 
                 Card(
@@ -240,4 +231,4 @@ fun ModDetailScreen(
             }
         }
     }
-} 
+}
