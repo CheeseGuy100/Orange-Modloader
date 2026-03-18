@@ -6,8 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Coffee
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Terrain
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -154,16 +154,16 @@ fun ModBrowserScreen(onBack: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            placeholder = { Text("Search mods...", color = Color(0xFF666666)) },
+            placeholder = { Text("Search mods...", color = MaterialTheme.colorScheme.onSurfaceVariant) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFF7CB342),
-                unfocusedBorderColor = Color(0xFF2A2A2A),
-                focusedContainerColor = Color(0xFF2A2A2A),
-                unfocusedContainerColor = Color(0xFF2A2A2A),
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                 cursorColor = Color(0xFF7CB342),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
             ),
             shape = RoundedCornerShape(12.dp)
         )
@@ -276,7 +276,7 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                         Text("😕", fontSize = 48.sp, color = Color.Gray)
                         Text(
                             "No mods found",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -324,7 +324,8 @@ fun ModBrowserScreen(onBack: () -> Unit) {
                                 Text(
                                     text = mod.description,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    maxLines = 2
+                                    maxLines = 2,
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row(
@@ -381,4 +382,4 @@ fun ModBrowserScreen(onBack: () -> Unit) {
             }
         }
     }
-} 
+}
