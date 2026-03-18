@@ -290,17 +290,12 @@ fun ModDetailScreen(
                             color = Color(0xFF7CB342)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        try {
-    Markdown(
-        content = project?.body ?: mod.description
-    )
-} catch (e: Exception) {
-    Text(
-        text = project?.body ?: mod.description,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface
-    )
+                        val cleanContent = remember(project, mod) {
+    (project?.body ?: mod.description)
+        .replace(Regex("<[^>]*>"), "")
 }
+
+Markdown(content = cleanContent)
                 }
             }
         }
