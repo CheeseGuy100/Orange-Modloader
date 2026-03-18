@@ -290,10 +290,17 @@ fun ModDetailScreen(
                             color = Color(0xFF7CB342)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Markdown(
-                            content = project?.body ?: mod.description
-                        )
-                    }
+                        try {
+    Markdown(
+        content = project?.body ?: mod.description
+    )
+} catch (e: Exception) {
+    Text(
+        text = project?.body ?: mod.description,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+}
                 }
             }
         }
