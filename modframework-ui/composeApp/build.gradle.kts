@@ -78,4 +78,4 @@ compose.desktop {
             packageVersion = "1.7.2"
         }
     }
-}
+} 
