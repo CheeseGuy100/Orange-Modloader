@@ -118,7 +118,6 @@ fun ModDetailScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Mod info card
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -131,12 +130,11 @@ fun ModDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // Mod icon
                             Card(
                                 modifier = Modifier.size(64.dp),
                                 shape = RoundedCornerShape(8.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = Color(0xFF2A2A2A)
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
                                 )
                             ) {
                                 if (project?.icon_url != null) {
@@ -177,13 +175,12 @@ fun ModDetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Categories
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             project?.categories?.take(3)?.forEach { category ->
                                 Card(
                                     shape = RoundedCornerShape(4.dp),
                                     colors = CardDefaults.cardColors(
-                                        containerColor = Color(0xFF1B2E00)
+                                        containerColor = MaterialTheme.colorScheme.secondaryContainer
                                     )
                                 ) {
                                     Text(
@@ -198,7 +195,6 @@ fun ModDetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Social links
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -263,7 +259,6 @@ fun ModDetailScreen(
                     )
                 }
 
-                // Install button
                 Button(
                     onClick = { showVersionPicker = true },
                     modifier = Modifier.fillMaxWidth(),
@@ -280,7 +275,6 @@ fun ModDetailScreen(
                     )
                 }
 
-                // Description with markdown
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
