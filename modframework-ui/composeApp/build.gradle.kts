@@ -51,8 +51,8 @@ android {
         applicationId = "com.modframework.ui"
         minSdk = 24
         targetSdk = 34
-        versionCode = 9
-        versionName = "0.7.2-Alpha"
+        versionCode = 10
+        versionName = "0.8.0-Alpha"
     }
 
     compileOptions {
@@ -67,7 +67,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Deb)
             packageName = "MangoLoader"
-            packageVersion = "1.7.2"
+            packageVersion = "1.8.0"
         }
     }
 } 
