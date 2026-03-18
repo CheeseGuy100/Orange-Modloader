@@ -1,5 +1,5 @@
 package com.modframework.ui
-
+import com.mikepenz.markdown.m3.Markdown
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -221,11 +221,9 @@ fun ModDetailScreen(
                             color = Color(0xFF7CB342)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = project?.body ?: mod.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        Markdown(
+    content = project?.body ?: mod.description
+    )
                     }
                 }
             }
