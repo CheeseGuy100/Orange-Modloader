@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import com.mikepenz.markdown.m3.Markdown
 import io.ktor.client.*
 import io.ktor.client.call.*
