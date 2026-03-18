@@ -28,6 +28,10 @@ kotlin {
                 implementation("androidx.compose.material:material-icons-extended:1.5.4")
                 implementation("com.mikepenz:multiplatform-markdown-renderer:0.27.0")
                 implementation("com.mikepenz:multiplatform-markdown-renderer-m3:0.27.0")
+              
+implementation("io.coil-kt.coil3:coil-compose:3.0.0")
+                 
+implementation("io.coil-kt.coil3:coil-network-ktor:3.0.0")
             }
         }
 
