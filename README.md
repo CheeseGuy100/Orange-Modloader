@@ -1,5 +1,5 @@
 # Mangoloader
-"Built with the help of Claude (Anthropic)"
+"Built with the help of Claude (Anthropic) amd we're waiting for contributors to come and help us with Windows and Linux💛"
 # ModFramework
 
 A universal Lua-based modding engine for Java games. Add a full modding system to your game in minutes.
